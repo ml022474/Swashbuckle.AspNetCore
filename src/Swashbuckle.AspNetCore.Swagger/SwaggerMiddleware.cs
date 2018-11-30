@@ -38,13 +38,14 @@ namespace Swashbuckle.AspNetCore.Swagger
 
             try
             {
-                var host = httpContext.Request.Host.HasValue
-                    ? $"{httpContext.Request.Scheme ?? "http"}://{httpContext.Request.Host}"
+                var basePath = httpContext.Request.PathBase.HasValue
+                    ? httpContext.Request.PathBase.Value
                     : null;
 
-                var basePath = httpContext.Request.PathBase;
-
-                var swagger = swaggerProvider.GetSwagger(documentName, host, basePath);
+                var swagger = swaggerProvider.GetSwagger(
+                    documentName: documentName,
+                    host: null,
+                    basePath: basePath);
 
                 // One last opportunity to modify the Swagger Document - this time with request context
                 foreach (var filter in _options.PreSerializeFilters)
